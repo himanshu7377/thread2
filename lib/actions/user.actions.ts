@@ -5,6 +5,7 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 import { revalidatePath } from "next/cache";
 import { string } from "zod";
+import { FilterQuery, SortOrder } from "mongoose";
 
 interface params{
     userId:string,
@@ -92,4 +93,57 @@ export async function fetchUserPosts(userId:string) {
         throw new Error(`failed to fetch user post :${error.message}`)
     }
 } 
+
+
+export async function fetchUsers({
+    userId,
+    searchString,
+    pageNumber=1,
+    pagesize=20,
+    sortBy='desc'
+}:{
+    userId:string,
+    searchString?:string,
+    pageNumber?:number,
+    pagesize?:number,
+    sortBy?:SortOrder
+}){
+    try {
+        connectToDB()
+
+        const skipAmount = (pageNumber-1)* pagesize;
+
+        const regex= new RegExp( searchString?'i':"")
+
+        const query: FilterQuery <typeof User> ={
+            id:{$ne:userId}
+        }
+
+
+        if(searchString?.trim() ! ==''){
+            query.$or =[
+                {username:{$regex:regex}},
+                {name:{$regex:regex}}
+            ]
+        }
+
+        const sortOptions = {createdAt:sortBy}
+
+        const usersQuery =User.find(query)
+        .sort(sortOptions)
+        .skip(skipAmount)
+        .limit(pagesize)
+
+
+        const totaluserCount = await User.countDocuments(query)
+
+        const users = await usersQuery.exec()
+
+        const isNext = totaluserCount >skipAmount + users.length;
+
+        return {users,isNext}
+    } catch (error:any) {
+        throw new Error (`Failed to fetch users:${error.message}`)
+    }
+}
     
