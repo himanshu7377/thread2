@@ -6,24 +6,6 @@ import { currentUser } from "@clerk/nextjs"
 import {redirect} from 'next/navigation'
 
 
-
-
-
-
-
-interface Props {
-  user: {
-    id: string;
-    objectId: string;
-    username: string;
-    name: string;
-    bio: string;
-    image: string;
-  };
-  btnTitle: string;
-}
-
-
 async function page() {
 
     const user=await currentUser();

@@ -1,4 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
+import { string } from "zod";
 
 
 const userSchema= new mongoose.Schema({
