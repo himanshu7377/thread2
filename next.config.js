@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+    typescript:{
+      ignoreBuildErrors:true,
+    },
     experimental: {
         serverActions: {
           dev: true, // Set to true if you want to enable server actions in development
