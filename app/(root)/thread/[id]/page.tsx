@@ -7,9 +7,12 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 
-const Page= async ({params}:{params:{id:string}})=>{
+const Page= async ({params}:{params:{id?:string}})=>{
 
-    if (!params.id) return null;
+    console.log('Params:', params); // Add this line
+    if (!params.id) {
+        throw new Error('Invalid thread ID');
+    }
 
     const user= await currentUser();
     if(!user) return null;

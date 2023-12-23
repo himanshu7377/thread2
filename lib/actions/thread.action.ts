@@ -62,7 +62,11 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 }
 
 
-export async function fetchThreadById(id: string) {
+export async function fetchThreadById(id?: string) {
+    console.log('Thread ID:', id);
+    if (!id) {
+        throw new Error('Invalid thread ID');
+    }
     connectToDB();
 
     try {
