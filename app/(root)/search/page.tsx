@@ -1,14 +1,8 @@
-
-import ProfileHeader from "@/components/shared/Profileheader";
 import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs"
-
 import {redirect} from 'next/navigation'
-
-import { profileTabs } from "@/constants";
-import Image from "next/image";
-import ThreadsTab from "@/components/shared/ThreadsTab";
 import UserCard from "@/components/cards/UserCard";
+import Searchbar from "@/components/shared/Searchbar";
 
 
 async function Page() {
@@ -18,16 +12,13 @@ async function Page() {
    if(!user) return null
 
     const userInfo= await fetchUser(user.id);
-
-    // console.log(userInfo ,'userinfo  not there')
     
-
     if(!userInfo?.onboarded) redirect ('/onboarding')
     const result = await fetchUsers({
         userId:user.id,
         searchString:"",
         pageNumber:1,
-        pagesize:25
+        pageSize:25
       
       
       
@@ -40,6 +31,7 @@ async function Page() {
         </h1>
 
         {/* search bar */}
+        <Searchbar routeType='search' />
 
         <div className="mt-14 flex flex-col gap-9">
               {

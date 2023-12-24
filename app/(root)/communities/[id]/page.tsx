@@ -1,4 +1,4 @@
-import ProfileHeader from "@/components/shared/Profileheader";
+import ProfileHeader from "@/components/shared/ProfileHeader";
 
 import { currentUser } from "@clerk/nextjs";
 
